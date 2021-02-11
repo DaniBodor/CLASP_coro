@@ -11,11 +11,17 @@ data = args[2];
 conditions = getFileList(data);
 
 
+
 for (cond = 0; cond < conditions.length; cond++) {
 	if (cond == include_folder && cond != exclude_folder){
 		curr_cond = data+cond+File.separator;
+
+		flist = getFileList(curr_cond);
+		file_path = curr_cond+flist[f];
+		
+		return file_path
+		}
 	}
-	
 }
 
 
