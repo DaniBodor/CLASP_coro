@@ -1,0 +1,4 @@
+figure out file selector as separate or not
+figure out to do list as github thingy
+
+make macros for overlap counter
