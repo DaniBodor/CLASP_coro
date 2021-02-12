@@ -4,6 +4,9 @@ BP_tol = 5
 FM_prom = 5000
 
 
+selectImage(1);
+close("\\Others");
+
 
 // split multi channel image into single channel images
 ori = getTitle();
@@ -60,28 +63,15 @@ IJ.deleteRows(0, nResults);
 roiManager("measure");
 out_array = Table.getColumn("Mean");
 
-x = Array.filter(out_array, 111);	_111 = x.length;
-x = Array.filter(out_array, 110);	_110 = x.length;
-x = Array.filter(out_array, 101);	_101 = x.length;
-x = Array.filter(out_array, 100);	_100 = x.length;
 
-/*
-A = 
-_111 = out_array.length - Array.deleteValue(out_array, 111).length;
-_110 = out_array.length - Array.deleteValue(out_array, 110).length;
-_101 = out_array.length - Array.deleteValue(out_array, 101).length;
-_100 = out_array.length - Array.deleteValue(out_array, 100).length;
 
-_111 = Array.deleteValue(out_array, 111).length;
-_111 = nResults - out_array.length;
-Array.deleteValue(out_array, 110);
-_110 = _111 - out_array.length;
-Array.deleteValue(out_array, 101);
-_101 = _110 - out_array.length;
-_100 = out_array.length
-*/
+X = Array.deleteValue(out_array, 111);	_111 = nResults - X.length;
+X = Array.deleteValue(out_array, 110);	_110 = nResults - X.length;
+X = Array.deleteValue(out_array, 101);	_101 = nResults - X.length;
+X = Array.deleteValue(out_array, 100);	_100 = nResults - X.length;
 
-print(ori,nResults,_111,_110,_101,_100);
+
+print(ori,_111,_110,_101,_100);
 
 
 
