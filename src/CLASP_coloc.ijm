@@ -16,31 +16,31 @@ selectImage("DAPI");		dna = getTitle();
 
 // find spots in CLASP channel
 roiManager("reset");
-selectImage(clasp);	run("Duplicate...", "");
+selectImage(clasp);	run("Duplicate...", " ");
 BP = getTitle();
 run("Bandpass Filter...", "filter_large="+BP_large+" filter_small="+BP_small+" suppress=None tolerance="+BP_tol+" autoscale");
 run("Find Maxima...", "prominence="+FM_prom+" output=[Point Selection]");
 roiManager("Add");
 run("Find Maxima...", "prominence=5000 output=[Single Points]");
 // CLASP signal gets value 100
-run("Divide...","value="+2.55);
+run("Divide...","value=2.55");
 clasp_points = getTitle();
 
 
 // threshold CEN and CORO channels
-selectImage(cen);	run("Duplicate...", "");
+selectImage(cen);	run("Duplicate...", " ");
 bin_cen = getTitle();
 setAutoThreshold("Yen dark");
 run("Convert to Mask");
 // CEN signal gets value 10
-run("Divide...","value="+25.5);
+run("Divide...","value=25.5");
 
-selectImage(coro);	run("Duplicate...", "");
+selectImage(coro);	run("Duplicate...", " ");
 bin_coro = getTitle();
 setAutoThreshold("Yen dark");
 run("Convert to Mask");
 // corona signal gets value 1
-run("Divide...","value="+255);
+run("Divide...","value=255");
 
 /*
  * Value reference:
@@ -50,6 +50,11 @@ run("Divide...","value="+255);
  * 111 = CLASP + CEN + Corona
  */
 
+imageCalculator("Add create", clasp_points,bin_cen);
+sum = getTitle();
+imageCalculator("Add", sum,bin_coro);
+
+roiManager("measure");
 
 
 
@@ -57,25 +62,25 @@ run("Divide...","value="+255);
 function singleIMs(){
 	selectImage(ori);
 	setSlice(2);
-	run("Duplicate", "CLASP");
+	run("Duplicate...", "title=CLASP");
 	resetMinAndMax;
 	run("Fire");
 
 	selectImage(ori);
 	setSlice(3);
-	run("Duplicate", "CENTROMERES");
+	run("Duplicate...", "title=CENTROMERES");
 	resetMinAndMax;
 	run("Fire");
 		
 	selectImage(ori)
 	setSlice(1);
-	run("Duplicate", "CORONAS");
+	run("Duplicate...", "title=CORONAS");
 	resetMinAndMax;
 	run("Fire");
 	
 	selectImage(ori)
 	setSlice(4);
-	run("Duplicate", "DAPI");
+	run("Duplicate...", "title=DAPI");
 	resetMinAndMax;
 }	
 	

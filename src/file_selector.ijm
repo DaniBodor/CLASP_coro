@@ -13,7 +13,7 @@ conditions = getFileList(data);
 
 
 for (cond = 0; cond < conditions.length; cond++) {
-	if (cond == include_folder && cond != exclude_folder){
+	if (cond == include_folder && cond != exclude_folder && endsWith(cond, File.separator)){
 		curr_cond = data+cond+File.separator;
 
 		flist = getFileList(curr_cond);
