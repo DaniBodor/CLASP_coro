@@ -43,20 +43,31 @@ run("Convert to Mask");
 run("Divide...","value=255");
 
 /*
- * Value reference:
- * 100 = CLASP only
- * 110 = CLASP + CEN
- * 101 = CLASP + Corona
- * 111 = CLASP + CEN + Corona
+ * Value reference & image color
+ * (using the 'brgbcmyw' LUT @ (81,120) minmax):
+ * 100 = CLASP only (blue)
+ * 110 = CLASP + CEN (cyan)
+ * 101 = CLASP + Corona (magenta)
+ * 111 = CLASP + CEN + Corona (yellow)
+ * 
+ * 
  */
 
 imageCalculator("Add create", clasp_points,bin_cen);
 sum = getTitle();
 imageCalculator("Add", sum,bin_coro);
 
+IJ.deleteRows(0, nResults);
 roiManager("measure");
 
 
+print(ori);
+for (res = 0; res < nResults; res++) {
+	binval = getResult("Mean",res);
+	
+}
+selectImage(ori);
+//close("\\Others");
 
 
 function singleIMs(){
