@@ -4,10 +4,6 @@ BP_tol = 5
 FM_prom = 5000
 
 
-selectImage(1);
-close("\\Others");
-
-
 // split multi channel image into single channel images
 ori = getTitle();
 singleIMs(){
@@ -74,9 +70,10 @@ X = Array.deleteValue(out_array, 100);	_100 = nResults - X.length;
 print(ori,_111,_110,_101,_100);
 
 
-
+/*
 selectImage(1);
 close("\\Others");
+*/
 
 
 function singleIMs(){
