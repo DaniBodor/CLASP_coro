@@ -1,5 +1,6 @@
-cropsize = 250;
 
+cropsize = 100;
+makeRectangle((getWidth()-cropsize)/2,(getHeight()-cropsize)/2,cropsize,cropsize);
 
 for (i = 0; i < nImages; i++) {
 	selectImage(i+1);
