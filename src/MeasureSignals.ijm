@@ -21,10 +21,13 @@ bg_ringwidth = 1;		// in pixels
 
 
 roiManager("reset");
+print("\\Clear");
+run("Clear Results");
 
 
 // crop central region for analysis
 oriIM = getTitle();
+print(oriIM);
 cropAnalysisRegion(cropsize);
 cropIM = getTitle();
 run("Properties...", "pixel_width=1 pixel_height=1");	Stack.setXUnit("px");	Stack.setYUnit("px");
@@ -32,7 +35,7 @@ run("Properties...", "pixel_width=1 pixel_height=1");	Stack.setXUnit("px");	Stac
 // run through functions
 getDNArea(cropIM, DAPI_channel);	// find nuclear outline from DAPI image
 findSpots(cropIM, CLASP_channel);	// find spots in CLASP channels
-//measureAllChannels();
+measureAllChannels();
 
 // determine intensity of 
 analysis_circsize = 5;
@@ -111,20 +114,23 @@ function findSpots(image, channel) {
 function measureAllChannels() {
 	selectImage(cropIM);
 	for (roi = 1; roi < roiManager("count"); roi++) {
-		
+
+		signal_array = newArray(nSlices);
+		signal_array[0] = roi;
 		for (c = 1; c < nSlices; c++) {
 			// measure specific signal
 			roiManager("select", roi);
 			setSlice(c);
-			signal = measureHoffman(bg_ringwidth);
+			signal_array[c] = measureHoffman(bg_ringwidth);
 		}
+		Array.print(signal_array);
 	}
 }
 
 function measureHoffman(ring) {
 	innerDens = getValue("IntDen");
 	innerArea = getValue("Area");
-	InnerMean = getValue("Mean");
+	innerMean = getValue("Mean");
 	
 	// make bg roi and measure signal
 	makeOval(getValue("BX")-ring, getValue("BY")-ring, getValue("Width")+(2*ring), getValue("Height")+(2*ring));
