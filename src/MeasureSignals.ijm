@@ -40,22 +40,8 @@ run("Properties...", "pixel_width=1 pixel_height=1");	Stack.setXUnit("px");	Stac
 
 // run through functions
 getDNArea(cropIM, DAPI_channel);	// find nuclear outline from DAPI image
-findSpots(cropIM, CLASP_channel);	// find spots in CLASP channels
+findSpots(cropIM, spot_detection_channel);	// find spots in CLASP channels
 measureAllChannels();
-
-// determine intensity of 
-analysis_circsize = 5;
-for (i = 0; i < nResults; i++) {
-	offset = (analysis_circsize-1)/2;
-	x = getResult("X", i) - offset;
-	y = getResult("Y", i) - offset;
-	makeOval(x, y, analysis_circsize, analysis_circsize);
-	
-	roiManager("add");
-	roiManager("select", roiManager("count")-1);
-	roiManager("rename", "spot_"+i+1);
-}
-
 
 
 
@@ -63,8 +49,9 @@ function cropAnalysisRegion(cropsize) {
 	/*
 	 * Crop central region for analysis
 	 */
+//	cropsize = 250;
 	makeRectangle((getWidth()-cropsize)/2,(getHeight()-cropsize)/2,cropsize,cropsize);
-	run("Duplicate...", "title=cropped duplicate");
+	run("Duplicate...", "title=cropped"+oriIM+" duplicate");
 }
 
 
@@ -74,7 +61,7 @@ function getDNArea(image, channel) {
 	 */
 	selectImage(image);
 	setSlice(channel);
-	run("Duplicate...", "title=dapi");
+	run("Duplicate...", "title=dapi"+oriIM);
 	dapiIM=getTitle();
 	
 	setAutoThreshold("Minimum dark");
@@ -94,7 +81,7 @@ function findSpots(image, channel) {
 	selectImage(image);
 	setSlice(channel);
 	resetMinAndMax();
-	run("Duplicate...", "title=duplicate");
+	run("Duplicate...", "title=duplicate"+oriIM);
 	dup=getTitle();
 	
 	run("Bandpass Filter...", "filter_large="+BPfilter_large+" filter_small="+BPfilter_small+" suppress=None tolerance=5 autoscale");
@@ -131,6 +118,7 @@ function measureAllChannels() {
 		}
 		Array.print(signal_array);
 	}
+	roiManager("deselect");
 }
 
 function measureHoffmann(ring) {
