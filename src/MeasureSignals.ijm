@@ -1,21 +1,27 @@
-// parameter sets
-
-DAPI_channel = 4;
+////// parameter settings
+// imaging channels
+CORO_channel = 1;
 CLASP_channel = 2;
 CENPC_channel = 3;
-CORO_channel = 1;
+DAPI_channel = 4;
 
+spot_detection_channel = CENPC_channel;
+
+// size of central region to analyze
 cropsize = 250;	// in pixels
 
+// Nuclear detection parameters
 dapiDilateCycles = 4;
 DAPI_maxSize = 20000;	// in px^2
 DAPI_minSize = 2500;	// in px^2
 
-BPfilter_large = 3;
-BPfilter_small = 2;
-FM_prominence = 10000;
+// spot detection parameters
+BPfilter_large = 3;		// bandpass filter
+BPfilter_small = 2;		// bandpass filter
+FM_prominence = 10000;	// find maxima
 
-analysis_circsize = 5;	// in pixels (uneven number)
+// Hoffmann circle sizes
+analysis_circsize = 5;	// in pixels (use an uneven number)
 bg_ringwidth = 1;		// in pixels
 
 
@@ -121,18 +127,19 @@ function measureAllChannels() {
 			// measure specific signal
 			roiManager("select", roi);
 			setSlice(c);
-			signal_array[c] = measureHoffman(bg_ringwidth);
+			signal_array[c] = measureHoffmann(bg_ringwidth);
 		}
 		Array.print(signal_array);
 	}
 }
 
-function measureHoffman(ring) {
+function measureHoffmann(ring) {
 	innerDens = getValue("IntDen");
 	innerArea = getValue("Area");
 	innerMean = getValue("Mean");
 	
 	// make bg roi and measure signal
+//	ring = 1;
 	makeOval(getValue("BX")-ring, getValue("BY")-ring, getValue("Width")+(2*ring), getValue("Height")+(2*ring));
 	outerDens = getValue("IntDen");
 	outerArea = getValue("Area");
