@@ -6,13 +6,14 @@ CENPC_channel = 3;
 DAPI_channel = 4;
 
 spot_detection_channel = CLASP_channel;
+signal_cutoff = 50;
 
 // size of central region to analyze
 cropsize = 250;	// in pixels
 
 // Nuclear detection parameters
 DNAThreshType = "Otsu";
-dapiDilateCycles = 2;
+dapiDilateCycles = 4;
 DAPI_maxSize = 20000;	// in px^2
 DAPI_minSize = 2500;	// in px^2
 
@@ -53,6 +54,7 @@ function cropAnalysisRegion(cropsize) {
 //	cropsize = 250;
 	makeRectangle((getWidth()-cropsize)/2,(getHeight()-cropsize)/2,cropsize,cropsize);
 	run("Duplicate...", "title=cropped"+oriIM+" duplicate");
+	run("Select None");
 }
 
 
@@ -63,6 +65,7 @@ function getDNArea(image, channel) {
 	selectImage(image);
 	setSlice(channel);
 	run("Duplicate...", "title=dapi"+oriIM);
+	run("Select None");
 	dapiIM=getTitle();
 	
 	setAutoThreshold(DNAThreshType + " dark");
@@ -83,6 +86,7 @@ function findSpots(image, channel) {
 	setSlice(channel);
 	resetMinAndMax();
 	run("Duplicate...", "title=duplicate"+oriIM);
+	run("Select None");
 	dup=getTitle();
 	
 	run("Bandpass Filter...", "filter_large="+BPfilter_large+" filter_small="+BPfilter_small+" suppress=None tolerance=5 autoscale");
@@ -99,7 +103,6 @@ function findSpots(image, channel) {
 		
 		roiManager("add");
 		roiManager("select", roiManager("count")-1);
-		roiManager("rename", "spot_"+i+1);
 	}
 }
 
@@ -117,7 +120,14 @@ function measureAllChannels() {
 			setSlice(c);
 			signal_array[c] = measureHoffmann(bg_ringwidth);
 		}
-		Array.print(signal_array);
+		if (signal_array[2] < signal_cutoff){
+			roiManager("delete");
+			roi--;
+		}
+		else {
+			Array.print(signal_array);
+			roiManager("rename", "spot_"+roi);
+		}
 	}
 	roiManager("deselect");
 }
