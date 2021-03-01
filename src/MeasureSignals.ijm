@@ -5,13 +5,14 @@ CLASP_channel = 2;
 CENPC_channel = 3;
 DAPI_channel = 4;
 
-spot_detection_channel = CENPC_channel;
+spot_detection_channel = CLASP_channel;
 
 // size of central region to analyze
 cropsize = 250;	// in pixels
 
 // Nuclear detection parameters
-dapiDilateCycles = 4;
+DNAThreshType = "Otsu";
+dapiDilateCycles = 2;
 DAPI_maxSize = 20000;	// in px^2
 DAPI_minSize = 2500;	// in px^2
 
@@ -64,7 +65,7 @@ function getDNArea(image, channel) {
 	run("Duplicate...", "title=dapi"+oriIM);
 	dapiIM=getTitle();
 	
-	setAutoThreshold("Minimum dark");
+	setAutoThreshold(DNAThreshType + " dark");
 	run("Convert to Mask");
 	for (i = 0; i < dapiDilateCycles; i++)		run("Dilate");
 	run("Analyze Particles...", "size="+DAPI_minSize+"-"+DAPI_maxSize+" display exclude clear include add");
