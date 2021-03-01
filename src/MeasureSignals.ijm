@@ -120,7 +120,7 @@ function measureAllChannels() {
 			setSlice(c);
 			signal_array[c] = measureHoffmann(bg_ringwidth);
 		}
-		if (signal_array[2] < signal_cutoff){
+		if (signal_array[spot_detection_channel] < signal_cutoff){
 			roiManager("delete");
 			roi--;
 		}
