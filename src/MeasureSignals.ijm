@@ -1,3 +1,9 @@
+/// consider bandpassing without autoscaling/saturation and then using find max prominence of 50. 
+// this works well for mpst clasp images but not strict enough for cenpc
+
+
+
+
 ////// parameter settings
 // imaging channels
 CORO_channel = 1;
@@ -28,6 +34,9 @@ bg_ringwidth = 1;		// in pixels
 
 
 
+
+
+
 roiManager("reset");
 print("\\Clear");
 run("Clear Results");
@@ -44,7 +53,7 @@ run("Properties...", "pixel_width=1 pixel_height=1");	Stack.setXUnit("px");	Stac
 getDNArea(cropIM, DAPI_channel);	// find nuclear outline from DAPI image
 findSpots(cropIM, spot_detection_channel);	// find spots in CLASP channels
 measureAllChannels();
-
+roiManager("Show All without labels");
 
 
 function cropAnalysisRegion(cropsize) {
